@@ -1,0 +1,185 @@
+---
+title: "PS1"
+author: "Xiuqi Ning (12173771)"
+date: '2018-10-07'
+output:
+  html_document:
+    number_sections: yes
+  pdf_document: default
+---
+**Front matter**
+
+This submission is my work alone and complies with the 30531 integrity policy.
+  
+  Add your initials to indicate your agreement: **__**
+  
+# Setup
+
+# R4DS Exercises
+## Section heading goes here
+<!--Please do your best to match the problem set numbering. This will happen 
+    automatically if you follow the pattern of #s.
+    
+    One # gives you a main heading; 
+    two ## give a sub-heading. 
+    For the next layer of numbering, please follow the numbering manually; 
+    If you are really interested in automatic numbering see a TA.
+    
+    Try knit to html before proceeding to see what the output will look like!
+    -->
+    
+2.1.1
+I think nothing is displayed, because in this case, neither the mapping and the geom is specified.
+
+2.1.2
+```{r}
+library(tidyverse)
+dim(mpg)
+```
+There are 234 rows 11 columns. The rows represent observations, and the columns represent variables.
+
+2.1.3
+```{r}
+mpg <- ggplot2::mpg
+ggplot(data=mpg)+
+  geom_point(mapping=aes(x=cyl,y=hwy))
+```
+
+2.1.4
+```{r}
+?mpg
+```
+f =front-wheel drive, r=rear wheel drive, 4=4wd
+
+2.1.5
+```{r}
+ggplot(data=mpg)+
+  geom_point(mapping=aes(x=class,y=drv))
+```
+
+Because in this dataset, both class and drv are categorical variables. The only information this scatter plot reveals is what combinations of class and drv exist in the dataset. For example, there are front-wheel drive compact vehicles, but no front-wheel drive 2 seaters.
+
+2.2.1
+```{r}
+?mpg
+print(mpg)
+```
+
+<chr> stands for character, <int> stands for integer, <dbl> stands for double float.
+Among the 11 variables of mpg, manufacture, model, trans, drv, fl and class are categorical variables.
+
+2.2.2
+Gragh 1:
+```{r}
+ggplot(data=mpg)+
+  geom_point(mapping=aes(x=hwy,y=cty,color=year))
+```
+Graph 2:
+```{r}
+ggplot(data=mpg)+
+  geom_point(mapping=aes(x=hwy,y=cty,color=as.character(year)))
+```
+
+I think the second graph is better, because it seems more straightforward than the first one.
+
+2.2.3
+I think according to the result, continuous variables cannot be mapped to shape.
+
+2.2.4
+```{r}
+ggplot(data=mpg)+
+  geom_point(mapping=aes(x=displ,y=hwy,color=displ<5))
+```
+
+As shown in the above scatter plots, ggplot evaluates displ < 5 and creates a temporary boolean variable indicating whether the observations satisfy the specified condition, and represents TRUE and FALSE with different colors.
+
+2.2.5
+```{r}
+ggplot(data=mpg)+
+  geom_point(mapping=aes(x=displ,y=hwy,color="blue"))
+```
+
+I think the problem is that when "blue" is assigned to the color of ggplot, it should not be put inside the function aes().
+
+We should use this code instead:
+```{r}
+ggplot(mpg,aes(displ,hwy))+
+  geom_point(color="blue")
+```
+
+2.3.1
+Graph 1:
+```{r}
+ggplot(data=mpg)+
+  geom_point(mapping=aes(x=displ,y=hwy))+
+  facet_grid(cols=vars(drv))
+```
+Graph 2:
+```{r}
+ggplot(data=mpg)+
+  geom_point(mapping=aes(x=displ,y=hwy))+
+  facet_grid(rows=vars(year))
+```
+Graph 3:
+```{r}
+ggplot(data=mpg)+
+  geom_point(mapping=aes(x=displ,y=hwy))+
+  facet_grid(rows=vars(year),cols=vars(drv))
+```
+
+The command facet_grid forms a matrix of panels defined by row and column faceting variables. It decides the number of facets to produce on the dimension of rows and columns.
+
+2.3.2
+The command facet_grid() works with continuous variables as well.
+
+2.3.3
+```{r}
+ggplot(data=mpg)+
+  geom_point(mapping=aes(x=displ,y=hwy))+
+  facet_wrap(vars(year),nrow=2)
+```
+
+One of the advantages of using facetting instead of coloring is to avoid the possible confusion caused by having several distinct colors shown on the same plot. As the number of unique levels in the mapping categorical increases, it can be difficulty to distinguish between the differnet colors.
+
+A possible disadvantage in using facetting is that since the points are on separate plots, direct comparisons might not be as straight forward.
+
+When having a larger dataset, facetting might be less straight forward than color aesthetic.
+
+2.3.4
+nrow stands for the number of rows and ncol stands for the number of columns.
+
+facet_grid() does not have nrow and ncol since the number of rows and columns are equal to the number of unique levels in the row/column variables.
+
+2.3.5
+```{r}
+ggplot(data=mpg)+
+  geom_point(mapping=aes(x=class,y=hwy,color=class))+
+  facet_wrap(vars(year),nrow=2)
+```
+
+2.3.6
+```{r}
+ggplot(data=mpg)+
+  geom_point(mapping=aes(x=class,y=hwy,color=class))+
+  facet_wrap(vars(year),nrow=2)+
+  theme(axis.text.x = element_text(angle=45))
+```
+
+2.3.7
+```{r}
+ggplot(data=mpg)+
+  geom_point(mapping=aes(x=displ,y=hwy,shape=manufacturer))+
+  facet_grid(year~drv)
+```
+
+I think many manufactures are missing because the function ggplot() displays no more than 6 different symbols.
+
+2.3.8
+```{r}
+ggplot(data=mpg)+
+  geom_point(mapping=aes(x=displ,y=hwy,shape=manufacturer))+
+  facet_grid(year~drv)+
+  scale_shape_manual(values=0:15)
+```
+
+
